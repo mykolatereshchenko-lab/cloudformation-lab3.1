@@ -3,7 +3,7 @@ Description: WordPress Single Instance Stack
 
 Parameters:
   KeyName:
-    Type: AWS::EC2::KeyPair::lab
+    Type: AWS::EC2::KeyPair::KeyName
     Description: EC2 KeyPair
   DBName:
     Type: String
@@ -51,26 +51,19 @@ Resources:
           systemctl enable httpd
           systemctl start mysqld
           systemctl enable mysqld
-
-          # Configure MySQL
           mysql -e "CREATE DATABASE ${DBName};"
           mysql -e "CREATE USER '${DBUser}'@'localhost' IDENTIFIED BY '${DBPassword}';"
           mysql -e "GRANT ALL PRIVILEGES ON ${DBName}.* TO '${DBUser}'@'localhost';"
           mysql -e "FLUSH PRIVILEGES;"
-
-          # Install WordPress
           cd /var/www/html
           wget https://wordpress.org/latest.tar.gz
           tar -xzf latest.tar.gz
           cp -r wordpress/* .
           rm -rf wordpress latest.tar.gz
-
-          # Configure WordPress
           cp wp-config-sample.php wp-config.php
           sed -i "s/database_name_here/${DBName}/" wp-config.php
           sed -i "s/username_here/${DBUser}/" wp-config.php
           sed -i "s/password_here/${DBPassword}/" wp-config.php
-
           chown -R apache:apache /var/www/html
           chmod -R 755 /var/www/html
 
