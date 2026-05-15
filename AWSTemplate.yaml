@@ -1,4 +1,4 @@
-AWSTemplateFormatVersion: 2010-09-09
+AWSTemplate: 2010-09-09
 Description: A sample CloudFormation template with YAML comments.
 # Resources section
 Resources:
